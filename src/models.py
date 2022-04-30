@@ -8,7 +8,7 @@ from eralchemy import render_er
 
 Base = declarative_base()
 
-class Person(Base):
+""" class Person(Base):
     __tablename__ = 'person'
     # Here we define columns for the table person
     # Notice that each column is also a normal Python instance attribute.
@@ -24,10 +24,41 @@ class Address(Base):
     street_number = Column(String(250))
     post_code = Column(String(250), nullable=False)
     person_id = Column(Integer, ForeignKey('person.id'))
-    person = relationship(Person)
+    person = relationship(Person) """
 
-    def to_dict(self):
-        return {}
+class User(Base):
+    __tablename__ = 'users'
+    id = Column(Integer, primary_key=True)
+    username = Column(String(250), nullable=False)
+    firstname = Column(String(250), nullable=False)
+    lastname = Column(String(250), nullable=False)
+    email = Column(String(250), nullable=False)
+
+class Post(Base):
+    __tablename__ = 'posts'
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('users.id'))
+
+class Media(Base):
+    __tablename__ = 'media'
+    id = Column(Integer, primary_key=True)
+    type = Column(Integer, nullable=False)
+    url = Column(String(250), nullable=False)
+    post_id = Column(Integer, ForeignKey('posts.id'))
+
+class Comment(Base):
+    __tablename__ = 'comments'
+    id = Column(Integer, primary_key=True)
+    comment_text = Column(String(250), nullable=False)
+    author_id = Column(Integer, ForeignKey('users.id'))
+    post_id = Column(Integer, ForeignKey('posts.id'))
+
+class Follower(Base):
+    __tablename__ = 'followers'
+    id = Column(Integer, primary_key=True)
+    user_from_id = Column(Integer, ForeignKey('users.id'))
+    user_to_id = Column(Integer, ForeignKey('users.id'))
+
 
 ## Draw from SQLAlchemy base
 try:
